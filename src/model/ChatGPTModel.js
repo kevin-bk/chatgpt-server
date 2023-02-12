@@ -12,7 +12,7 @@ class ChatGPT {
             // (Optional) Parameters as described in https://platform.openai.com/docs/api-reference/completions
             modelOptions: {
                 // You can override the model name and any other parameters here.
-                model: process.env.CHATGPT_MODEL,
+                model: process.env.CHATGPT_PLUS_MODEL,
             },
             // (Optional) Set custom instructions instead of "You are ChatGPT...".
             promptPrefix: promptPrefix,
@@ -32,7 +32,7 @@ class ChatGPT {
         };
 
         this.chatGptClient = new ChatGPTClient(
-            process.env.OPENAI_ACCESS_TOKEN,
+            process.env.OPENAI_PLUS_ACCESS_TOKEN,
             clientOptions, 
             cacheOptions
         );
