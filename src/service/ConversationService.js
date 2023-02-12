@@ -20,7 +20,7 @@ class ConversationService {
     }
 
     // chat with ChatGPT Model
-    async chat(conversationId, message) {
+    async chat(conversationId, message, userLabel) {
         if (!ConversationModel.getConversationById(conversationId)) {
             await ConversationModel.createConversation(conversationId, DEFAULT_ROLE_PLAY_INTRODUCTION);
         }
@@ -36,8 +36,8 @@ class ConversationService {
             };
         }
 
-        const ChatGPTClient = this.getChatGPTModel(conversationId);
-        const response = await ChatGPTClient.chat(message, chatGPTConversationInfo);
+        const ChatGPTClient = this.getChatGPTModel(conversationId, conversationInfo.rolePlay_introduction);
+        const response = await ChatGPTClient.chat(message, userLabel, chatGPTConversationInfo);
 
         if (response.response) {
             ConversationModel.updateConversationParentMessageId(

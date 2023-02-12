@@ -38,8 +38,9 @@ class ChatGPT {
         );
     }
 
-    async chat(message, conversationInfo = {}) {
+    async chat(message, userLabel, conversationInfo = {}) {
         try {
+            this.chatGptClient.userLabel = userLabel;
             const response = await this.chatGptClient.sendMessage(message, conversationInfo);
 
             return response; // { response: 'Hi! How can I help you today?', conversationId: '...', messageId: '...' }
