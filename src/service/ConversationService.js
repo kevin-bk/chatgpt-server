@@ -1,9 +1,13 @@
 import ConversationModel from '../model/ConversationModel.js';
 import ChatGPT from '../model/ChatGPTModel.js';
+import ChatGPTUnofficial from '../model/ChatGPTUnofficialModel.js';
 import ConversationConstant from '../constant/ConversationConstant.js';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 const DEFAULT_ROLE_PLAY_INTRODUCTION = ConversationConstant.DEFAULT_ROLE_PLAY_INTRODUCTION;
 const DEDAULT_BOT_NAME = ConversationConstant.DEDAULT_BOT_NAME;
+const USE_MODEL = process.env.USE_MODEL;
 
 class ConversationService {
     constructor() {
@@ -13,7 +17,12 @@ class ConversationService {
     // return chatGPT Model for this conversation id
     getChatGPTModel(conversationId, promptPrefix = DEFAULT_ROLE_PLAY_INTRODUCTION, botName = DEDAULT_BOT_NAME) {
         if (!this.conversations[conversationId]) {
-            this.conversations[conversationId] = new ChatGPT(conversationId, promptPrefix, botName);
+            if (USE_MODEL === 'chatgpt-unofficial') {
+                console.log('Using chatgpt-unofficial model');
+                this.conversations[conversationId] = new ChatGPTUnofficial();
+            } else {
+                this.conversations[conversationId] = new ChatGPT(conversationId, promptPrefix, botName);
+            }
         }
 
         return this.conversations[conversationId];
@@ -36,18 +45,33 @@ class ConversationService {
             };
         }
 
-        const ChatGPTClient = this.getChatGPTModel(conversationId, conversationInfo.rolePlay_introduction);
-        const response = await ChatGPTClient.chat(message, userLabel, chatGPTConversationInfo);
+        const ChatGPTClient = this.getChatGPTModel(conversationId);
 
-        if (response.response) {
-            ConversationModel.updateConversationParentMessageId(
-                conversationId,
-                response.conversationId,
-                response.messageId
-            );
+        if (USE_MODEL === 'chatgpt-unofficial') {
+            const response = await ChatGPTClient.chat(message, userLabel, chatGPTConversationInfo);
+
+            if (response.conversationId) {
+                ConversationModel.updateConversationParentMessageId(
+                    conversationId,
+                    response.conversationId,
+                    response.messageId
+                );
+            }
+
+            return response.response;
+        } else {
+            const response = await ChatGPTClient.chat(message, userLabel, chatGPTConversationInfo);
+
+            if (response.response) {
+                ConversationModel.updateConversationParentMessageId(
+                    conversationId,
+                    response.conversationId,
+                    response.messageId
+                );
+            }
+
+            return response.response;
         }
-
-        return response.response;
     }
 }
 
