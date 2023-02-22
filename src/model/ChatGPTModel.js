@@ -3,6 +3,7 @@ import { KeyvFile } from 'keyv-file';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
+// use waylaidwanderer/chatgpt-api package
 class ChatGPT {
     constructor(conversationId, promptPrefix, chatGptLabel) {
         const clientOptions = {
