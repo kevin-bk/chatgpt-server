@@ -7,7 +7,6 @@ dotenv.config();
 class ChatGPT {
     constructor(conversationId, promptPrefix, chatGptLabel) {
         const clientOptions = {
-            reverseProxyUrl: process.env.PROXY_SERVER,
             modelOptions: {
                 model: process.env.CHATGPT_PLUS_MODEL
             },
@@ -20,7 +19,7 @@ class ChatGPT {
         };
 
         this.chatGptClient = new ChatGPTClient(
-            process.env.OPENAI_PLUS_ACCESS_TOKEN,
+            process.env.OPENAI_API_PLUS_KEY,
             clientOptions, 
             cacheOptions
         );
