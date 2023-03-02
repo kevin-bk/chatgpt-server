@@ -25,6 +25,7 @@ class ConversationService {
                 console.log('Using chatgpt-official model');
                 this.conversations[conversationId] = new ChatGPTOfficial();
             } else {
+                console.log('Using waylaid model');
                 this.conversations[conversationId] = new ChatGPT(conversationId, promptPrefix, botName);
             }
         }
