@@ -52,6 +52,7 @@ class ConversationService {
 
         const ChatGPTClient = this.getChatGPTModel(conversationId);
 
+        console.log(`${userLabel}: ${message}`);
         const response = await ChatGPTClient.chat(message, userLabel, chatGPTConversationInfo);
 
         if (response.response) {
