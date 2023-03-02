@@ -2,6 +2,7 @@ import ConversationModel from '../model/ConversationModel.js';
 import ChatGPT from '../model/ChatGPTModel.js';
 import ChatGPTUnofficial from '../model/ChatGPTUnofficialModel.js';
 import ConversationConstant from '../constant/ConversationConstant.js';
+import ChatGPTOfficial from '../model/ChatGPTOfficialModel.js';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
@@ -17,9 +18,12 @@ class ConversationService {
     // return chatGPT Model for this conversation id
     getChatGPTModel(conversationId, promptPrefix = DEFAULT_ROLE_PLAY_INTRODUCTION, botName = DEDAULT_BOT_NAME) {
         if (!this.conversations[conversationId]) {
-            if (USE_MODEL === 'chatgpt-unofficial') {
-                console.log('Using chatgpt-unofficial model');
+            if (USE_MODEL === 'proxy') {
+                console.log('Using chatgpt-unofficial proxy model');
                 this.conversations[conversationId] = new ChatGPTUnofficial();
+            } else if (USE_MODEL === 'official') {
+                console.log('Using chatgpt-official model');
+                this.conversations[conversationId] = new ChatGPTOfficial();
             } else {
                 this.conversations[conversationId] = new ChatGPT(conversationId, promptPrefix, botName);
             }
@@ -38,7 +42,7 @@ class ConversationService {
         let chatGPTConversationInfo = {};
 
         // Assign before data of conversation
-        if (conversationInfo.chatgpt_conversations_id) {
+        if (conversationInfo.chatgpt_parent_message_id) {
             chatGPTConversationInfo = {
                 conversationId: conversationInfo.chatgpt_conversations_id,
                 parentMessageId: conversationInfo.chatgpt_parent_message_id
@@ -47,31 +51,17 @@ class ConversationService {
 
         const ChatGPTClient = this.getChatGPTModel(conversationId);
 
-        if (USE_MODEL === 'chatgpt-unofficial') {
-            const response = await ChatGPTClient.chat(message, userLabel, chatGPTConversationInfo);
+        const response = await ChatGPTClient.chat(message, userLabel, chatGPTConversationInfo);
 
-            if (response.conversationId) {
-                ConversationModel.updateConversationParentMessageId(
-                    conversationId,
-                    response.conversationId,
-                    response.messageId
-                );
-            }
-
-            return response.response;
-        } else {
-            const response = await ChatGPTClient.chat(message, userLabel, chatGPTConversationInfo);
-
-            if (response.response) {
-                ConversationModel.updateConversationParentMessageId(
-                    conversationId,
-                    response.conversationId,
-                    response.messageId
-                );
-            }
-
-            return response.response;
+        if (response.response) {
+            ConversationModel.updateConversationParentMessageId(
+                conversationId,
+                response.conversationId,
+                response.messageId
+            );
         }
+
+        return response.response;
     }
 }
 
