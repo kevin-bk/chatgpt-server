@@ -1,6 +1,6 @@
 import { ChatGPTClient } from '@waylaidwanderer/chatgpt-api';
-import { KeyvFile } from 'keyv-file';
-import { KeyvRedis } from '@keyv/redis';
+// import { KeyvFile } from 'keyv-file';
+import KeyvRedis from '@keyv/redis';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
@@ -22,7 +22,7 @@ class ChatGPT {
 
         this.chatGptClient = new ChatGPTClient(
             process.env.OPENAI_API_PLUS_KEY,
-            clientOptions, 
+            clientOptions,
             cacheOptions
         );
     }
