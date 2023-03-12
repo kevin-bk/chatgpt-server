@@ -16,17 +16,21 @@ class ConversationService {
     }
 
     // return chatGPT Model for this conversation id
-    getChatGPTModel(conversationId, promptPrefix = DEFAULT_ROLE_PLAY_INTRODUCTION, botName = DEDAULT_BOT_NAME) {
+    getChatGPTModel(conversationId, promptPrefix = DEFAULT_ROLE_PLAY_INTRODUCTION) {
         if (!this.conversations[conversationId]) {
-            if (USE_MODEL === 'proxy') {
-                console.log('Using chatgpt-unofficial proxy model');
-                this.conversations[conversationId] = new ChatGPTUnofficial();
-            } else if (USE_MODEL === 'official') {
-                console.log('Using chatgpt-official model');
-                this.conversations[conversationId] = new ChatGPTOfficial();
-            } else {
-                console.log('Using waylaid model');
-                this.conversations[conversationId] = new ChatGPT(conversationId, promptPrefix, botName);
+            switch (USE_MODEL) {
+                case 'proxy':
+                    console.log('Using chatgpt-unofficial proxy model');
+                    this.conversations[conversationId] = new ChatGPTUnofficial();
+                    break;
+                case 'official':
+                    console.log('Using chatgpt-official model');
+                    this.conversations[conversationId] = new ChatGPTOfficial();
+                    break;
+                default:
+                    console.log('Using waylaid model');
+                    this.conversations[conversationId] = new ChatGPT(conversationId, promptPrefix, DEDAULT_BOT_NAME);
+                    break;
             }
         }
 
@@ -46,11 +50,14 @@ class ConversationService {
         if (conversationInfo.chatgpt_parent_message_id) {
             chatGPTConversationInfo = {
                 conversationId: conversationInfo.chatgpt_conversations_id,
-                parentMessageId: conversationInfo.chatgpt_parent_message_id
+                parentMessageId: conversationInfo.chatgpt_parent_message_id,
+                rolePlay_introduction: conversationInfo.roleplay_introduction
             };
         }
 
-        const ChatGPTClient = this.getChatGPTModel(conversationId);
+        const ChatGPTClient = chatGPTConversationInfo ? 
+            this.getChatGPTModel(conversationId, chatGPTConversationInfo.rolePlay_introduction) : 
+            this.getChatGPTModel(conversationId);
 
         console.log(`${userLabel}: ${message}`);
         const response = await ChatGPTClient.chat(message, userLabel, chatGPTConversationInfo);
