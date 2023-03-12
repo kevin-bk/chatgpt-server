@@ -1,6 +1,6 @@
 import { ChatGPTClient } from '@waylaidwanderer/chatgpt-api';
-// import { KeyvFile } from 'keyv-file';
-import KeyvRedis from '@keyv/redis';
+import { KeyvFile } from 'keyv-file';
+// import KeyvRedis from '@keyv/redis';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
@@ -16,8 +16,8 @@ class ChatGPT {
         };
 
         const cacheOptions = {
-            // store: new KeyvFile({ filename: `./src/database/caches/${conversationId}-cache.json` }),
-            store: new KeyvRedis('redis://localhost:6379')
+            store: new KeyvFile({ filename: `./src/database/caches/${conversationId}-cache.json` }),
+            // store: new KeyvRedis('redis://localhost:6379')
         };
 
         this.chatGptClient = new ChatGPTClient(
