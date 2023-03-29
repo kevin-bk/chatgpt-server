@@ -9,7 +9,8 @@ class ChatGPT {
     constructor(conversationId, promptPrefix, chatGptLabel) {
         const clientOptions = {
             modelOptions: {
-                model: process.env.CHATGPT_PLUS_MODEL
+                model: process.env.CHATGPT_PLUS_MODEL,
+                max_tokens: 8000,
             },
             promptPrefix: promptPrefix,
             chatGptLabel: chatGptLabel

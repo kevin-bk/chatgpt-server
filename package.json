@@ -17,7 +17,7 @@
   "license": "ISC",
   "dependencies": {
     "@keyv/redis": "^2.5.5",
-    "@waylaidwanderer/chatgpt-api": "^1.26.0",
+    "@waylaidwanderer/chatgpt-api": "^1.33.0",
     "chatgpt": "^5.0.0",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
