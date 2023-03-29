@@ -10,10 +10,12 @@ class ChatGPT {
         const clientOptions = {
             modelOptions: {
                 model: process.env.CHATGPT_PLUS_MODEL,
-                max_tokens: 8000,
+                max_tokens: 4903,
             },
             promptPrefix: promptPrefix,
-            chatGptLabel: chatGptLabel
+            chatGptLabel: chatGptLabel,
+            maxContextTokens: 8000,
+            maxPromptTokens: 3097
         };
 
         const cacheOptions = {
