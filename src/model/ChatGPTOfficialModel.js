@@ -5,7 +5,7 @@ dotenv.config();
 class ChatGPTOfficial {
     constructor() {
         this.chatGptClient = new ChatGPTAPI({
-            apiKey: process.env.OPENAI_API_PLUS_KEY
+            apiKey: process.env.OPENAI_API_KEY
         });
     }
 

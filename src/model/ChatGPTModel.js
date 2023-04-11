@@ -10,12 +10,13 @@ class ChatGPT {
         const clientOptions = {
             modelOptions: {
                 model: process.env.CHATGPT_PLUS_MODEL,
-                max_tokens: 4903,
+                // max_tokens: 4903,
             },
             promptPrefix: promptPrefix,
             chatGptLabel: chatGptLabel,
-            maxContextTokens: 8000,
-            maxPromptTokens: 3097
+            // maxContextTokens: 8000,
+            // maxPromptTokens: 3097,
+            reverseProxyUrl: process.env.PROXY_SERVER
         };
 
         const cacheOptions = {
@@ -24,7 +25,7 @@ class ChatGPT {
         };
 
         this.chatGptClient = new ChatGPTClient(
-            process.env.OPENAI_API_PLUS_KEY,
+            process.env.OPENAI_API_KEY,
             clientOptions,
             cacheOptions
         );
