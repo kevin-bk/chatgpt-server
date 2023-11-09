@@ -1,14 +1,11 @@
 import ConversationModel from '../model/ConversationModel.js';
 import ChatGPT from '../model/ChatGPTModel.js';
-import ChatGPTUnofficial from '../model/ChatGPTUnofficialModel.js';
 import ConversationConstant from '../constant/ConversationConstant.js';
-import ChatGPTOfficial from '../model/ChatGPTOfficialModel.js';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
 const DEFAULT_ROLE_PLAY_INTRODUCTION = ConversationConstant.DEFAULT_ROLE_PLAY_INTRODUCTION;
 const DEDAULT_BOT_NAME = ConversationConstant.DEDAULT_BOT_NAME;
-const USE_MODEL = process.env.USE_MODEL;
 
 class ConversationService {
     constructor() {
@@ -18,20 +15,8 @@ class ConversationService {
     // return chatGPT Model for this conversation id
     getChatGPTModel(conversationId, promptPrefix = DEFAULT_ROLE_PLAY_INTRODUCTION) {
         if (!this.conversations[conversationId]) {
-            switch (USE_MODEL) {
-                case 'proxy':
-                    console.log('Using chatgpt-unofficial proxy model');
-                    this.conversations[conversationId] = new ChatGPTUnofficial();
-                    break;
-                case 'official':
-                    console.log('Using chatgpt-official model');
-                    this.conversations[conversationId] = new ChatGPTOfficial();
-                    break;
-                default:
-                    console.log('Using waylaid model');
-                    this.conversations[conversationId] = new ChatGPT(conversationId, promptPrefix, DEDAULT_BOT_NAME);
-                    break;
-            }
+            console.log('Using waylaid model');
+            this.conversations[conversationId] = new ChatGPT(conversationId, promptPrefix, DEDAULT_BOT_NAME);
         }
 
         return this.conversations[conversationId];

@@ -1,6 +1,5 @@
 import { ChatGPTClient } from '@waylaidwanderer/chatgpt-api';
 import { KeyvFile } from 'keyv-file';
-// import KeyvRedis from '@keyv/redis';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
@@ -9,15 +8,14 @@ class ChatGPT {
     constructor(conversationId, promptPrefix, chatGptLabel) {
         const clientOptions = {
             modelOptions: {
-                model: process.env.CHATGPT_PLUS_MODEL
+                model: process.env.CHATGPT_MODEL
             },
             promptPrefix: promptPrefix,
             chatGptLabel: chatGptLabel
         };
 
         const cacheOptions = {
-            store: new KeyvFile({ filename: `./src/database/caches/${conversationId}-cache.json` }),
-            // store: new KeyvRedis('redis://localhost:6379')
+            store: new KeyvFile({ filename: `./src/database/caches/${conversationId}-cache.json` })
         };
 
         this.chatGptClient = new ChatGPTClient(
@@ -37,7 +35,7 @@ class ChatGPT {
             console.log(e);
 
             return {
-                response: 'hmm'
+                response: 'Some thing went wrong, please contact Kevin.'
             };
         }
     }

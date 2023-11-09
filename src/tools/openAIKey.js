@@ -1,5 +1,4 @@
 import Authenticator from "openai-authenticator";
-import * as dotenv from 'dotenv';
 
 export default getOpenAIKey = async () => {
     const authenticator = new Authenticator();
