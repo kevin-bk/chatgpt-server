@@ -19,7 +19,7 @@ class ChatGPT {
         };
 
         this.chatGptClient = new ChatGPTClient(
-            process.env.OPENAI_API_PLUS_KEY,
+            process.env.OPENAI_API_KEY,
             clientOptions,
             cacheOptions
         );
