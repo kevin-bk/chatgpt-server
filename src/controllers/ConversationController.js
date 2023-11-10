@@ -9,6 +9,13 @@ class ConversationController {
                 });
             });
     }
+
+    setConversationPrompt(req, res) {
+        ConversationService.setConversationPrompt(req.body.conversationId, req.body.newPrompt)
+            .then(() => {
+                res.send(true);
+            });
+    }
 }
 
 export default new ConversationController;

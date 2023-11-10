@@ -34,6 +34,18 @@ class ConversationModel {
             })
             .write();
     }
+
+    // set prompt in conversation
+    setConversationPrompt(conversationId, newPrompt) {
+        db.get(CONVERSATION)
+            .find({ conversations_id: conversationId })
+            .assign({
+                rolePlay_introduction: newPrompt,
+                chatgpt_conversations_id: null,
+                chatgpt_parent_message_id: null
+            })
+            .write();
+    }
 }
 
 export default new ConversationModel;
