@@ -8,7 +8,10 @@ class ChatGPT {
     constructor(conversationId, promptPrefix, chatGptLabel) {
         const clientOptions = {
             modelOptions: {
-                model: process.env.CHATGPT_MODEL
+                model: process.env.CHATGPT_MODEL,
+                temperature: 1,
+                top_p: 0.5,
+                // presence_penalty: 0
             },
             promptPrefix: promptPrefix,
             chatGptLabel: chatGptLabel

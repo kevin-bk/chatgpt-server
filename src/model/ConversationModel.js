@@ -26,13 +26,17 @@ class ConversationModel {
 
     // Update chatGPT parent message id in conversation
     updateConversationParentMessageId(conversationId, chatGPTConversationId, newParentMessageId) {
-        db.get(CONVERSATION)
-            .find({ conversations_id: conversationId })
-            .assign({ 
-                chatgpt_conversations_id: chatGPTConversationId,
-                chatgpt_parent_message_id: newParentMessageId
-            })
-            .write();
+        try {
+            db.get(CONVERSATION)
+                .find({ conversations_id: conversationId })
+                .assign({
+                    chatgpt_conversations_id: chatGPTConversationId,
+                    chatgpt_parent_message_id: newParentMessageId
+                })
+                .write();
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     // set prompt in conversation
