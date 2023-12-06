@@ -5,10 +5,17 @@ const CONVERSATION = ConversationConstant.CONVERSATION;
 
 class ConversationModel {
     // create new conversation
-    createConversation(conversationId, rolePlayIntroduction = ConversationConstant.DEFAULT_ROLE_PLAY_INTRODUCTION) {
+    createConversation(
+        conversationId, 
+        rolePlayIntroduction = ConversationConstant.DEFAULT_ROLE_PLAY_INTRODUCTION,
+        assistantId = null,
+        threadId = null
+    ) {
         const newConversation = {
             conversations_id: conversationId,
-            rolePlay_introduction: rolePlayIntroduction
+            rolePlay_introduction: rolePlayIntroduction,
+            assistant_id: assistantId,
+            thread_id: threadId
         };
 
         db.get(CONVERSATION).push(newConversation).write();
@@ -32,6 +39,20 @@ class ConversationModel {
                 .assign({
                     chatgpt_conversations_id: chatGPTConversationId,
                     chatgpt_parent_message_id: newParentMessageId
+                })
+                .write();
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    updateConversationAssistant(conversationId, assistantId, threadId) {
+        try {
+            db.get(CONVERSATION)
+                .find({ conversations_id: conversationId })
+                .assign({
+                    assistant_id: assistantId,
+                    thread_id: threadId
                 })
                 .write();
         } catch (e) {
